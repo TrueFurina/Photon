@@ -1,5 +1,7 @@
 import os
 import re
+import shutil
+import subprocess
 
 from core.colors import run, que, good, green, end, info
 from core.requester import requester
@@ -31,10 +33,9 @@ def updater():
 
         if choice != 'n':
             print('%s Updating Photon' % run)
-            os.system('git clone --quiet https://github.com/s0md3v/Photon %s'
-                      % (folder))
-            os.system('cp -r %s/%s/* %s && rm -r %s/%s/ 2>/dev/null'
-                      % (path, folder, path, path, folder))
+            subprocess.run(['git', 'clone', '--quiet', 'https://github.com/s0md3v/Photon', folder], check=False)
+            shutil.copytree(os.path.join(path, folder), path, dirs_exist_ok=True)
+            shutil.rmtree(os.path.join(path, folder))
             print('%s Update successful!' % good)
     else:
         print('%s Photon is up to date!' % good)
